@@ -3,7 +3,7 @@
 
 410806114 楊嘉蓁
 
-我的信箱：[c89261oo@gmail.com](c89261oo@gmail.com)
+我的信箱：<c89261oo@gmail.com>
 
 
 
