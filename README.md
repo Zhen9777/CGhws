@@ -10,3 +10,4 @@
 HOMEWORK：
 
 - [hw0](https://zhen9777.github.io/CGhws/hw0.html)
+- [hw1 - Timer](https://zhen9777.github.io/CGhws/hw1.html)
