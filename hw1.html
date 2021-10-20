@@ -13,17 +13,17 @@
 	} 
 	body {
 		overflow: hidden
-  }
+   }
+
 </style>
 </head>
 
 <body>
 <div id='info'> Homework1 - Timer <br>
-<button id='toggle' style="width:15%"> Start </button>
-<button id='rest' style="width:15%"> Restart </button>
-<button id='tenSec' style="width:15%"> +10 </button>
-<button id='oneSec' style="width:15%"> +1 </button>
-<button id='quartz' style="width:15%"> Quartz </button>
+<button id='toggle' style="width:15%; background-color: white; color: #EA7500; border: none;"> Start </button>
+<button id='rest' style="width:15%; background-color: white; color: #EA7500; border: none;"> Restart </button>
+<button id='tenSec' style="width:15%; background-color: white; color: #EA7500; border: none;"> +10 </button>
+<button id='quartz' style="width:15%; background-color: white; color: #EA7500; border: none;"> Quartz </button>
 </div>
 
 <audio id="bi" style="display:none">
@@ -35,40 +35,88 @@
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <script>
-
+//onmousedown="mouseDown()" onmouseup="mouseUp()"
 //javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
+
+     
+/*var output = document.getElementById('output'),
+    pressed = {};
+ var seconds = 0;
+function mouseDown() {
+    if ( pressed[0] ) return;
+	//seconds += clock.getSeconds;
+    pressed[0] = seconds;
+	console.log(clock.getDelta());
+};
+    
+function mouseUp() {
+    if ( !pressed[0] ) return;
+    var duration = ( clock.getSeconds - pressed[0] ) / 1000;
+    //output.innerHTML += '<p>Key ' + e.which  + ' was pressed for ' + duration + ' seconds</p>';
+	console.log(duration);
+	pressed[0] = 0;
+};*/
+var output = document.getElementById('output'),
+    pressed = {};
+
+window.onmousedown = function(e) {
+    if ( pressed[e.which] ) return;
+    pressed[e.which] = e.timeStamp;
+};
+    
+window.onmouseup = function(e) {
+    if ( !pressed[e.which] ) return;
+    duration = ( e.timeStamp - pressed[e.which] ) / 1000;
+    //output.innerHTML += '<p>Key ' + e.which  + ' was pressed for ' + duration + ' seconds</p>';
+	console.log(duration);
+    pressed[e.which] = 0;
+};
+
 
 var renderer, scene, camera;
 var controls, hand;
 var angle = 0;  // initialization IMPORTANT!
 var clock;
 var dt;
+var dtQua;
 var bi;
 var play = false;
 var turn = false;
 var quaTurn = false;
 var restart = false;
+var longB = false;
+var duration;
+	
+function longBu() {
+	play=false;
+	angle = 0;
+	turn = false;
+	$('#toggle').text ('Start');
+	return;
+}	
 
 $('#toggle').click(function() {
-	turn = !turn;
-	if (turn) { 
-		$('#toggle').text ('Stop');
-	} else {
-		$('#toggle').text ('Start');
-	}
-});
+turn = !turn;
+if (turn) { 
+	$('#toggle').text ('Stop');
+} else {
+	$('#toggle').text ('Start');
+}})
+
+
+
 $('#tenSec').click(function() {
 	angle += 2*Math.PI/6;
-});
-$('#oneSec').click(function() {
-	angle += 2*Math.PI/360;
 });
 $('#quartz').click(function() {
 	quaTurn = !quaTurn;
 	if (quaTurn) { 
 		$('#quartz').text ('Sector');
+		turnOneDegs();
 	} else {
 		$('#quartz').text ('Quartz');
+		dt = clock.getDelta();
+		angle -= 2*Math.PI*dt/60;
 	}
 });
 $('#rest').click(function() {
@@ -101,7 +149,7 @@ function init () {
 	camera.position.z = 40;
 	camera.lookAt (new THREE.Vector3(0, 0, 0));
 	
-	controls = new THREE.OrbitControls(camera, renderer.domElement);
+	//controls = new THREE.OrbitControls(camera, renderer.domElement);
 	
 	window.addEventListener('resize', onWindowResize, false);
 	///////////////////////////////////////////////////////////////
@@ -118,13 +166,31 @@ function init () {
 	var cone = new THREE.Mesh (coneGeometry, coneMaterial);
 	cone.position.set(0 , 2, 0);
 	
+	var cir = new THREE.Mesh (new THREE.CircleGeometry(0.4, 30), new THREE.MeshBasicMaterial({color:'#D26900'}));
+	cir.position.set(0 , 0, 5.5);
+	
 	hand.add(cylinder);
 	hand.add(cone);
+	hand.add(cir);
 	
 	
 	var clockBackground = new THREE.Mesh (new THREE.CircleGeometry(10, 30), new THREE.MeshBasicMaterial({color:'#FFE4CA'}));
 	scene.add (clockBackground);
 	clock = new THREE.Clock();
+	
+	var ornament1 = new THREE.Mesh (new THREE.BoxGeometry(0.3, 0.3, 2), new THREE.MeshBasicMaterial({color:'#D26900'}));
+	ornament1.position.set(9*Math.sin(0), 9*Math.cos(0), 0);
+	var ornament2 = ornament1.clone();
+	ornament2.position.set(9*Math.cos(0), 9*Math.sin(0), 0);
+	var ornament3 = ornament1.clone();
+	ornament3.position.set(-9*Math.cos(0), -9*Math.sin(0), 0);
+	var ornament4 = ornament1.clone();
+	ornament4.position.set(-9*Math.sin(0), -9*Math.cos(0), 0);
+	scene.add(ornament1);
+	scene.add(ornament2);
+	scene.add(ornament3);
+	scene.add(ornament4);
+	
 	//clock.getDelta(); //first call
 	
 	//setTimeout (turnSixDegs, 0); //give function name
@@ -140,10 +206,12 @@ function onWindowResize() {
 	
 }
 
-/*function turnSixDegs(){
-	angle += 6/180*Math.PI;
-	setTimeout (turnSixDegs, 1000);
-}*/
+function turnOneDegs(){
+	if(!quaTurn) return;
+	angle -= 2*Math.PI/60;
+	hand.rotation.z = -angle;
+	setTimeout (turnOneDegs, 1000);
+}
 
 function animate() {
 	
@@ -170,17 +238,18 @@ function animate() {
 		}
 	}
 	if(turn){
-		if(quaTurn){
-			setInterval(function(){ angle -= 2*Math.PI/360; }, 1000);
-		} else {
+		if(!quaTurn){
 			angle -= 2*Math.PI*dt/60;
 		}
 		play=true;
 	}
+	if (duration > 2){
+		longBu();
+	}
 	
 	hand.position.set (5*Math.sin(angle), 5*Math.cos(angle), 0);
 	hand.rotation.z = -angle;
-	controls.update();
+	//controls.update();
 	requestAnimationFrame(animate);
 	render();
 	
