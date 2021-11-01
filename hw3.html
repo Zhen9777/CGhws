@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#info {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	padding: 10px;
+	text-align: center;
+	color: #ffff00
+}
+
+body {
+	overflow: hidden;
+}
+</style>
+</head>
+
+<body>
+<div id="info">Homework3 - Modeling, Multiple Viewports</div>
+<script src="https://threejs.org/build/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<script>
+var camera, cameraF, scene, renderer;
+var frontView = false;
+
+$('#frontView').click ( function() {
+	frontView = ! frontView; // toggle	
+});
+
+init();
+animate();
+
+function init() {
+
+	scene = new THREE.Scene();
+
+	camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+	camera.position.set (0,25,100);
+
+	// front
+	cameraF = new THREE.OrthographicCamera (-10,10,10,-10, -4,40);
+	cameraF.position.set (0,0,20);
+  
+	// top
+	cameraT = new THREE.OrthographicCamera (-10,10,10,-10,-400,400);
+	cameraT.position.set (0,20,0);
+	cameraT.up.set (0,0,-1); // -Z
+	cameraT.lookAt (0,0,0);
+  
+	let light = new THREE.PointLight(0xffffff);
+	light.position.set(100, 300, 200);
+	scene.add(light);
+	
+	var gridXZ = new THREE.GridHelper(100, 10, 'red', 'white');
+	//scene.add(gridXZ);
+
+	renderer = new THREE.WebGLRenderer();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.setClearColor(0x888888);
+
+	let controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+	document.body.appendChild(renderer.domElement);
+  ////////////////////////////////////////////////////////////////////////
+
+	var length = 15,
+    width = 10;
+
+	var shape = new THREE.Shape(); 
+
+	// CW (CCW is also ok)
+	shape.moveTo(0, 0);
+	shape.lineTo(0, width);
+	shape.lineTo(length/2, width);
+	shape.lineTo(length/2, width/2);
+	shape.lineTo(length, width/2);
+	shape.lineTo(length, 0);
+	shape.lineTo(0, 0);
+
+	var extrudeSettings = {
+		steps: 1,
+		depth: 5,
+		bevelEnabled: false,
+	};
+
+	let loader = new THREE.TextureLoader()
+	loader.setCrossOrigin ("")
+	//let map = loader.load ("https://i.imgur.com/p8CRm9W.jpg")
+	//map.wrapS = map.wrapT = THREE.WrapRepeating
+	//map.repeat.set (1,1)
+	var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+	var material = new THREE.MeshLambertMaterial({
+		color: 0x00ff00
+	});
+	var mesh = new THREE.Mesh(geometry, material);
+	scene.add(mesh);
+
+	mesh.position.set (-7.5, -5, -2.5);
+  ////////////////////////////////
+	renderer.autoClear = false;
+  
+}
+
+function animate() {
+	requestAnimationFrame(animate);
+	render();
+}
+
+function render() {
+/*
+	if (frontView === true)
+		renderer.render(scene, cameraT);
+	else
+		renderer.render (scene, camera);
+*/
+	var ww = window.innerWidth;
+	var hh = window.innerHeight;
+  
+	renderer.clear();
+	renderer.setViewport (0,0, ww/2, hh/2);
+	renderer.render(scene, cameraF);
+  
+	renderer.setViewport (0,hh/2, ww/2, hh/2);
+	renderer.render(scene, cameraT);
+	
+	renderer.setViewport (ww/2 ,hh/2, ww/2, hh/2);
+	renderer.render(scene, camera);
+  
+}
+</script>
+</body>
+
+</html>
