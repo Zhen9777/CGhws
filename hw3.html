@@ -8,7 +8,8 @@
 	width: 100%;
 	padding: 10px;
 	text-align: center;
-	color: #ffff00
+	font-size: 28px;
+	color: #844200;
 }
 
 body {
@@ -39,70 +40,154 @@ function init() {
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
-	camera.position.set (0,25,100);
+	camera.position.set (30,25,75);
 
 	// front
-	cameraF = new THREE.OrthographicCamera (-10,10,10,-10, -4,40);
-	cameraF.position.set (0,0,20);
+	cameraF = new THREE.OrthographicCamera (-25,25,25,-25, -4,100);
+	cameraF.position.set (0,0,10);
   
 	// top
-	cameraT = new THREE.OrthographicCamera (-10,10,10,-10,-400,400);
-	cameraT.position.set (0,20,0);
+	cameraT = new THREE.OrthographicCamera (-25,25,25,-25,1,100);
+	cameraT.position.set (0,100,0);
 	cameraT.up.set (0,0,-1); // -Z
 	cameraT.lookAt (0,0,0);
+	
+	// R side
+	cameraR = new THREE.OrthographicCamera (-25,25,25,-25, 2,100);
+	cameraR.position.set (50, 0, 0);
+	//cameraT.up.set (0,0,-1); // -Z
+	cameraR.lookAt (0,0,0)
   
 	let light = new THREE.PointLight(0xffffff);
-	light.position.set(100, 300, 200);
+	light.position.set(80, 60, 70);
 	scene.add(light);
 	
 	var gridXZ = new THREE.GridHelper(100, 10, 'red', 'white');
-	//scene.add(gridXZ);
+	scene.add(gridXZ);
 
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	renderer.setClearColor(0x888888);
+	renderer.setClearColor(0xE9967A);
 
 	let controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 	document.body.appendChild(renderer.domElement);
   ////////////////////////////////////////////////////////////////////////
 
-	var length = 15,
-    width = 10;
-
+	var group = new THREE.Group();
+	
+	//var cylinder = new THREE.Mesh(new THREE.CylinderGeometry(8, 8, 16, 32), new THREE.MeshPhongMaterial({color: 0xc99480, specular: 0xf4f49e, shininess: 50}));
+	//cylinder.position.set(-8, 0, 0);
+	//cylinder
+	var cylinder1 = new THREE.Shape();
+	cylinder1.moveTo(8, 8);
+	cylinder1.absarc(8, 8, 8, 0, Math.PI*2);
+	var holeC1 = new THREE.Path();
+	holeC1.moveTo(8, 8);
+	holeC1.absarc(8, 8, 6, 0, Math.PI*2);
+	cylinder1.holes.push(holeC1);
+	var extrudeC1 = {
+		steps: 1,
+		depth: 6,
+		bevelEnabled: false,
+	};
+	var geometryC1 = new THREE.ExtrudeGeometry(cylinder1, extrudeC1);
+	var materialC1 = new THREE.MeshPhongMaterial({
+		color: 0xc99480,
+		specular: 0xf4f49e,
+		shininess: 50
+	});
+	var meshC1 = new THREE.Mesh(geometryC1, materialC1);
+	meshC1.rotation.x = Math.PI/2;
+	meshC1.position.set (-16, 8, -8);
+	
+	var cylinder2 = new THREE.Shape();
+	cylinder2.moveTo(8, 8);
+	cylinder2.absarc(8, 8, 8, 0, Math.PI*2);
+	var holeC2 = new THREE.Path();
+	holeC2.moveTo(8, 8);
+	holeC2.absarc(8, 8, 4, 0, Math.PI*2);
+	cylinder2.holes.push(holeC2);
+	var extrudeC2 = {
+		steps: 1,
+		depth: 10,
+		bevelEnabled: false,
+	};
+	var geometryC2 = new THREE.ExtrudeGeometry(cylinder2, extrudeC2);
+	var materialC2 = new THREE.MeshPhongMaterial({
+		color: 0xc99480,
+		specular: 0xf4f49e,
+		shininess: 50
+	});
+	var meshC2 = new THREE.Mesh(geometryC2, materialC2);
+	meshC2.rotation.x = Math.PI/2;
+	meshC2.position.set (-16, 2, -8);
+	
+	
+	//
 	var shape = new THREE.Shape(); 
-
 	// CW (CCW is also ok)
-	shape.moveTo(0, 0);
-	shape.lineTo(0, width);
-	shape.lineTo(length/2, width);
-	shape.lineTo(length/2, width/2);
-	shape.lineTo(length, width/2);
-	shape.lineTo(length, 0);
-	shape.lineTo(0, 0);
+	shape.moveTo(0, 8);
+	shape.absarc(8, 8, 8, Math.PI*1, Math.PI*1.5);
+	shape.lineTo(28, 0);
+	shape.absarc(28, 4, 4, Math.PI*1.5, Math.PI*2);
+	shape.lineTo(32, 12);
+	shape.absarc(28, 12, 4, 0, Math.PI*0.5);
+	shape.lineTo(8, 16);
+	shape.absarc(8, 8, 8, Math.PI*0.5, Math.PI*1);
 
+	var holeS1 = new THREE.Path();
+	holeS1.moveTo(28, 12);
+	holeS1.absarc(28, 12, 2, 0, Math.PI*2);
+	shape.holes.push(holeS1);
+	var holeS2 = new THREE.Path();
+	holeS2.moveTo(28, 4);
+	holeS2.absarc(28, 4, 2, 0, Math.PI*2);
+	shape.holes.push(holeS2);
+	var holeS3 = new THREE.Path();
+	holeS3.moveTo(8, 8);
+	holeS3.absarc(8, 8, 4, 0, Math.PI*2);
+	shape.holes.push(holeS3);
+	
+	
 	var extrudeSettings = {
 		steps: 1,
-		depth: 5,
+		depth: 4,
 		bevelEnabled: false,
 	};
 
-	let loader = new THREE.TextureLoader()
-	loader.setCrossOrigin ("")
-	//let map = loader.load ("https://i.imgur.com/p8CRm9W.jpg")
-	//map.wrapS = map.wrapT = THREE.WrapRepeating
-	//map.repeat.set (1,1)
+	
 	var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-	var material = new THREE.MeshLambertMaterial({
-		color: 0x00ff00
+	var material = new THREE.MeshPhongMaterial({
+		color: 0xc99480,
+		specular: 0xf4f49e,
+		shininess: 50
 	});
 	var mesh = new THREE.Mesh(geometry, material);
-	scene.add(mesh);
+	mesh.rotation.x = Math.PI/2;
+	mesh.position.set (-16, 0, -8);
+	
+	group.add(meshC1);
+	group.add(meshC2);
+	group.add(mesh);
+	
+	
+	scene.add(group);
 
-	mesh.position.set (-7.5, -5, -2.5);
+	
   ////////////////////////////////
 	renderer.autoClear = false;
   
+}
+
+function onWindowResize() {
+  
+	var width = window.innerWidth;
+	var height = window.innerHeight;
+	camera.aspect = width / height;
+	camera.updateProjectionMatrix();
+	renderer.setSize(width, height);
+	
 }
 
 function animate() {
@@ -121,13 +206,16 @@ function render() {
 	var hh = window.innerHeight;
   
 	renderer.clear();
-	renderer.setViewport (0,0, ww/2, hh/2);
+	renderer.setViewport (10,0, ww/2, hh/2);
 	renderer.render(scene, cameraF);
   
-	renderer.setViewport (0,hh/2, ww/2, hh/2);
+	renderer.setViewport (10,hh/2, ww/2, hh/2);
 	renderer.render(scene, cameraT);
 	
 	renderer.setViewport (ww/2 ,hh/2, ww/2, hh/2);
+	renderer.render(scene, cameraR);
+	
+	renderer.setViewport (ww/2 ,0, ww/2, hh/2);
 	renderer.render(scene, camera);
   
 }
