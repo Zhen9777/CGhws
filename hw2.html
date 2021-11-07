@@ -85,7 +85,7 @@ animate();
 function init1() {
 
 	scene1 = new THREE.Scene();
-	camera1 = new THREE.OrthographicCamera(-10.01, 10.01, 10.01, -10.01, -10, 10);
+	camera1 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
 	camera1.position.z = 5;
 
 	let points = [];
@@ -148,10 +148,10 @@ function init() {
 	
 	
 	column1 = new THREE.Mesh (new THREE.CylinderGeometry( 3, 3, 8, 30), new THREE.MeshPhongMaterial({color:'#D26900'}));
-	column2 = column1.clone();
-	column3 = column1.clone();
-	column4 = column1.clone();
-	column5 = column1.clone();
+	column2 = new THREE.Mesh (new THREE.CylinderGeometry( 3, 3, 8, 30), new THREE.MeshPhongMaterial({color:'#D26900'}));
+	column3 = new THREE.Mesh (new THREE.CylinderGeometry( 3, 3, 8, 30), new THREE.MeshPhongMaterial({color:'#D26900'}));
+	column4 = new THREE.Mesh (new THREE.CylinderGeometry( 3, 3, 8, 30), new THREE.MeshPhongMaterial({color:'#D26900'}));
+	column5 = new THREE.Mesh (new THREE.CylinderGeometry( 3, 3, 8, 30), new THREE.MeshPhongMaterial({color:'#D26900'}));
 	column1.position.set (50,4,10);
 	column2.position.set (30,4,20);
 	column3.position.set (10,4,60);
@@ -192,12 +192,32 @@ function animate() {
 	thirdView.lookAt(car.localToWorld (new THREE.Vector3(0, 0, 0) ));
 	
 	let Rect = makeRect(car);
-	if (Check_Intersect (Rect, column1, 4) || Check_Intersect (Rect, column2, 4) || Check_Intersect (Rect, column3, 4) ||
-		Check_Intersect (Rect, column4, 4) || Check_Intersect (Rect, column5, 4)) {
+	if (Check_Intersect (Rect, column1, 4)) {
 		column1.material.color = new THREE.Color ('red');
 		power = 0.1; 
-	} else {
-		column1.material.color = new THREE.Color ('#BB5E00');  
+	}
+	else if(Check_Intersect (Rect, column2, 4)){
+		column2.material.color = new THREE.Color ('red');
+		power = 0.1; 
+	}
+	else if(Check_Intersect (Rect, column3, 4)){
+		column3.material.color = new THREE.Color ('red');
+		power = 0.1; 
+	}
+	else if(Check_Intersect (Rect, column4, 4)){
+		column4.material.color = new THREE.Color ('red');
+		power = 0.1; 
+	}
+	else if(Check_Intersect (Rect, column5, 4)){
+		column5.material.color = new THREE.Color ('red');
+		power = 0.1; 
+	}
+	else {
+		column1.material.color = new THREE.Color ('#BB5E00'); 
+		column2.material.color = new THREE.Color ('#BB5E00'); 
+		column3.material.color = new THREE.Color ('#BB5E00'); 
+		column4.material.color = new THREE.Color ('#BB5E00'); 
+		column5.material.color = new THREE.Color ('#BB5E00'); 
 	}
 	
 	requestAnimationFrame(animate);
