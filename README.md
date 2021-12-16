@@ -13,3 +13,4 @@ HOMEWORK：
 - [hw1 - Timer](https://zhen9777.github.io/CGhws/hw1.html)
 - [hw2 - Dynamic Drive, Rectangle-Circle Intersection, Dual Viewports](https://zhen9777.github.io/CGhws/hw2.html)
 - [hw3 - Modeling, Multiple Viewports](https://zhen9777.github.io/CGhws/hw3.html)
+- [hw4 - Class, Texture Animate, module, and Picking](https://zhen9777.github.io/CGhws/hw4.html)
