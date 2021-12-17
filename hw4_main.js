@@ -22,7 +22,7 @@ function init() {
 	renderer.shadowMap.type = THREE.PCFShadowMap;
 	
 	camera = new THREE.PerspectiveCamera (50, width/height, 1, 10000);
-	camera.position.set (100, 120, 150);
+	camera.position.set (80, 75, 150);
 	
 	let controls = new OrbitControls(camera, renderer.domElement);
 	 
@@ -69,9 +69,7 @@ function doPointerDown (event) {
 }
 
 function onWindowResize() {
-  
-	var width = window.innerWidth;
-	var height = window.innerHeight;
+	
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
 	renderer.setSize(width, height);
@@ -82,7 +80,6 @@ function onWindowResize() {
 function animate() {
 	requestAnimationFrame (animate);
 	renderer.render (scene, camera);
-	
 	candles.forEach(function(a){ a.candle.lookAt( camera.position.x, 0, camera.position.z); });
 	
 };

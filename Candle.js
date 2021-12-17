@@ -5,11 +5,10 @@ class Candle {
 	constructor (x, y, z, name) {
 
 		this.candle = new THREE.Group();
-		let body = new THREE.Mesh (new THREE.CylinderGeometry(5,5,20,32), new THREE.MeshPhongMaterial({color:'#9F5000'}));
+		let body = new THREE.Mesh (new THREE.CylinderGeometry(5,5,20,32), new THREE.MeshPhongMaterial({color:'#D26900'}));
 		//this.candle children 
 		
 		let loader = new THREE.TextureLoader();
-		// load a resource
 		loader.load(
 			'https://i.imgur.com/JjQsgf3.png',
 			function(texture) {
@@ -47,7 +46,6 @@ class Candle {
    
 	textureAnimate() {
 		
-		
 		this.count = (this.count === undefined) ? 1 : this.count;
 
 		if (this.candle.children[1].children[0]!== undefined) {
@@ -69,12 +67,15 @@ class Candle {
 		this.candle.children[1].children[0].material.visible = false;
 		this.candle.children[0].intensity = 0;
 		setTimeout (this.flameLight.bind(this), Math.random()*3000);
+		
 	}
    
 	flameLight() {
+		
 		this.flameInterval = setInterval (this.textureAnimate.bind(this), 100);
 		this.candle.children[1].children[0].material.visible = true;
 		this.candle.children[0].intensity = 0.4;
+		
 	}
 	
 }
