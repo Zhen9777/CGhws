@@ -6,12 +6,10 @@ import { Candle } from "./Candle.js";
 var renderer, camera, scene;
 var candles = [];
 var pickables = [];
-var clock;
 var raycaster, mouseLoc;
 
 function init() {
 	scene = new THREE.Scene();
-	clock = new THREE.Clock();
 		
 	renderer = new THREE.WebGLRenderer();
 	let width = window.innerWidth;
@@ -84,8 +82,8 @@ function onWindowResize() {
 function animate() {
 	requestAnimationFrame (animate);
 	renderer.render (scene, camera);
-
-	let dt = clock.getDelta();
+	
+	candles.forEach(function(a){ a.candle.lookAt( camera.position.x, 0, camera.position.z); });
 	
 };
 
