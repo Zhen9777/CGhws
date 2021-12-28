@@ -13,7 +13,7 @@ class Candle {
 			'https://i.imgur.com/JjQsgf3.png',
 			function(texture) {
 				var flameMesh = new THREE.Mesh(new THREE.PlaneGeometry(15, 15),
-											   new THREE.MeshPhongMaterial({
+											   new THREE.MeshBasicMaterial({
 												   map: texture,
 												   alphaTest:0.5
 				}));
@@ -32,7 +32,7 @@ class Candle {
 		);
 		
 		let light = new THREE.PointLight(0xffffff, 0.4); // this.candle children
-		light.position.y = 20;
+		light.position.set(0, 20, 0);
 		this.candle.add(light);
 		this.candle.add (body);
 		this.candle.name = name;
