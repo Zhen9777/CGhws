@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#info {
+	position: absolute;
+	top: 3px;
+	width: 100%;
+	padding: 10px;
+	text-align: center;
+	font-size: 28px;
+	color: #844200;
+}
+
+body {
+	overflow: hidden;
+}
+</style>
+</head>
+
+<body>
+<div id="info">Homework5(Ver2) - Shader, Render-to-texture, module<br>
+</div>
+
+<script id="myVertexShader" type="x-shader/x-vertex">
+	varying vec2 vUv;
+	//vec3 ec_normal
+	//varying vec3 ec_light_dir;              
+	void main() {
+		gl_Position = projectionMatrix* modelViewMatrix * vec4( position, 1.0);
+		vUv = uv;
+		//vec3 ec_normal = normalize(normal_matrix * normal);           
+		//intensity = dot(ec_light_dir,ec_normal);
+	}
+</script>
+<script id="myFragmentShader" type="x-shader/x-fragment">
+	uniform sampler2D mytex;
+	varying vec2 vUv;
+	
+	void main() {
+		/*float intensity = dot(ec_light_dir,ec_normal);
+		vec3 SurfaceColor = vec3(gl_FrontMaterial.diffuse);
+		
+		float scale = ceil( 3.0 * NdotL ) / 3.0;
+		gl_FragColor = vec4( SurfaceColor * scale, 1.0 );
+		/*if (color.r == 1.0 && color.g == 1.0)
+			discard;
+		else{
+			if (intensity > 0.8)
+				color = vec4(1.0,1.0,0.5,0.5);
+			else if (intensity > 0.4)
+				color = vec4(0.6,0.3,0.3,1.0);
+			else
+				color = vec4(0.2,0.1,0.1,1.0);
+			gl_FragColor = color;
+		}*/
+		
+		vec4 color = texture2D (mytex, vUv);
+		if (color.r == 1.0 && color.g == 1.0)
+			discard;
+		else
+			gl_FragColor = color;//texture2D (mytex, vUv);
+	}
+</script> 
+
+
+<script type='module'>
+	javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
+
+	import {init, animate} from "./hw5_ver2_main.js";
+
+	init();
+	animate();
+	
+</script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#info {
+	position: absolute;
+	top: 3px;
+	width: 100%;
+	padding: 10px;
+	text-align: center;
+	font-size: 28px;
+	color: #844200;
+}
+
+body {
+	overflow: hidden;
+}
+</style>
+</head>
+
+<body>
+<div id="info">Homework5(Ver1) - Shader, Render-to-texture, module<br>
+</div>
+
+<script id="myVertexShader" type="x-shader/x-vertex">
+	uniform vec3 lightpos;  // world coordinate
+	varying vec3 eyelightdir;
+	varying vec3 eyenormal;   
+	varying vec4 eyepos;
+    
+	void main() {
+		gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+		eyepos = modelViewMatrix * vec4 (position, 1.0);
+		vec4 eyelightpos= viewMatrix * vec4 (lightpos, 1.0);
+		eyelightdir =  eyelightpos.xyz - eyepos.xyz;
+		eyenormal = normalMatrix * normal;
+    }
+</script>
+
+<script id="myFragmentShader" type="x-shader/x-fragment">
+	varying vec3 eyelightdir;
+	varying vec3 eyenormal;
+	varying vec4 eyepos;
+    
+	void main() {
+		float intensity = dot (normalize (eyenormal), normalize (eyelightdir));
+		if (intensity > 0.8)
+			intensity = 0.8;
+		else if (intensity > 0.4)
+			intensity = 0.4;
+		else
+			intensity = 0.0;
+		vec3 diffuse = intensity*vec3 (1.0, 0.7, 0.5);
+	
+		//vec3 h = normalize(-normalize (eyepos.xyz) + normalize (eyelightdir));
+		//float shininess = 40.;    
+		//vec3 specular = pow (dot (eyenormal, h), shininess) *vec3 (1,0,0);
+		//gl_FragColor = vec4(diffuse + specular, 1.0);
+		gl_FragColor = vec4 (diffuse + vec3(0,0,0.13), 1.0);
+	}
+</script>
+
+<script type='module'>
+	javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='https://mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
+	
+	import {init, animate, onWindowResize} from "./hw5_ver1_main.js";
+
+	init();
+	onWindowResize();
+	animate();
+	
+</script>
+</body>
+
+</html>
