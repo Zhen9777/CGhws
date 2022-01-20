@@ -33,7 +33,7 @@ function init() {
 
 	sceneRTT = new THREE.Scene();
 	pointLight = new THREE.PointLight(0xffffff);
-	pointLight.position.set(0, 300, 200);
+	//pointLight.position.set(0, 300, 200);
 	sceneRTT.add(pointLight);
 
 	renderTarget = new THREE.WebGLRenderTarget(
@@ -97,7 +97,9 @@ function animate() {
 	requestAnimationFrame(animate);
 	angle += 0.005;
 	mesh.rotation.y = -angle;
-
+	pointLight.position.set(100 * Math.cos(angle), 100, 100 * Math.sin(angle));
+	mesh.material.uniforms.lightpos.value.copy (pointLight.position);
+	
 	// render mesh to texture
 	renderer.setRenderTarget (renderTarget);
 	renderer.setClearColor(0xffff00);
