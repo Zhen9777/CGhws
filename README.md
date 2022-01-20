@@ -14,5 +14,4 @@ HOMEWORK：
 - [hw2 - Dynamic Drive, Rectangle-Circle Intersection, Dual Viewports](https://zhen9777.github.io/CGhws/hw2.html)
 - [hw3 - Modeling, Multiple Viewports](https://zhen9777.github.io/CGhws/hw3.html)
 - [hw4 - Class, Texture Animate, module, and Picking](https://zhen9777.github.io/CGhws/hw4.html)
-- [hw5 - Shader, Render-to-texture, module (Ver1)](https://zhen9777.github.io/CGhws/hw5_ver1.html)
-- [hw5 - Shader, Render-to-texture, module (Ver2)](https://zhen9777.github.io/CGhws/hw5_ver2.html)
+- hw5 - Shader, Render-to-texture, module -  [Ver1](https://zhen9777.github.io/CGhws/hw5_ver1.html) / [Ver2](https://zhen9777.github.io/CGhws/hw5_ver2.html)

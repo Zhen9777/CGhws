@@ -44,7 +44,15 @@ function init() {
 		}
 	);
 
-	mesh = new THREE.Mesh(new TeapotGeometry (1), new THREE.MeshPhongMaterial({color: 0xd1a294}));
+	let meshMaterial = new THREE.ShaderMaterial({
+		uniforms: {
+			lightpos: {type: 'v3', value: new THREE.Vector3()}
+		},
+		vertexShader: document.getElementById('myVertexShader').textContent,
+		fragmentShader: document.getElementById('myFragmentShader').textContent
+	});
+	
+	mesh = new THREE.Mesh(new TeapotGeometry (1), meshMaterial);
 	mesh.scale.set(32, 32, 32);
 	sceneRTT.add(mesh);
 
@@ -57,8 +65,8 @@ function init() {
 				value: renderTarget.texture
 			}
 		},
-		vertexShader: document.getElementById('myVertexShader').textContent,
-		fragmentShader: document.getElementById('myFragmentShader').textContent
+		vertexShader: document.getElementById('myPlaneVertexShader').textContent,
+		fragmentShader: document.getElementById('myPlaneFragmentShader').textContent
 	});
 
 
