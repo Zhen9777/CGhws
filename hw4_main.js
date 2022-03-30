@@ -27,6 +27,8 @@ function init() {
 	let controls = new OrbitControls(camera, renderer.domElement);
 	 
 	
+	window.addEventListener('resize', onWindowResize, false);
+	
 	let floor = new THREE.Mesh (new THREE.PlaneGeometry(200,200), new THREE.MeshPhongMaterial({color: '#FFD1A4', side: THREE.DoubleSide}));
 	scene.add (floor);
 	floor.rotation.x = -Math.PI/2;
