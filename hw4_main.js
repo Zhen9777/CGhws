@@ -86,4 +86,4 @@ function animate() {
 	
 };
 
-export {init, animate, scene, onWindowResize};
+export {init, animate, scene};
