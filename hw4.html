@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <style>
 #info {
 	position: absolute;
@@ -16,6 +17,16 @@ body {
 	overflow: hidden;
 }
 </style>
+
+<script type="importmap">
+{
+	"imports": {
+		"three" : "https://threejs.org/build/three.module.js",
+		"OrbitC" : "https://threejs.org/examples/jsm/controls/OrbitControls.js"
+	}
+}
+</script>
+
 </head>
 
 <body>
@@ -24,9 +35,10 @@ body {
 
 <script type='module'>
 
-	import {init, animate} from "./hw4_main.js";
+	import {init, animate, onWindowResize} from "./hw4_main.js";
 
 	init();
+	onWindowResize();
 	animate();
 	
 </script>

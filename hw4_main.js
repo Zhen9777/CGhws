@@ -1,5 +1,5 @@
-import * as THREE from "https://threejs.org/build/three.module.js";
-import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
+import * as THREE from "three";
+import { OrbitControls } from "OrbitC";
 
 import { Candle } from "./Candle.js";
 
@@ -70,6 +70,8 @@ function doPointerDown (event) {
 
 function onWindowResize() {
 	
+	var width = window.innerWidth;
+	var height = window.innerHeight;
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
 	renderer.setSize(width, height);
@@ -84,4 +86,4 @@ function animate() {
 	
 };
 
-export {init, animate, scene};
+export {init, animate, scene, onWindowResize};
